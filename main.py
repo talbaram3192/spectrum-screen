@@ -1,7 +1,16 @@
 from flask import Flask
 from flask import jsonify, make_response
+import pickle
+import config as CFG
+import sklearn
+
+
+def load_model():
+    return pickle.load(open(CFG.MODEL_FILE, 'rb'))
+
 
 app = Flask(__name__)
+model = load_model()
 
 
 @app.route("/api/predict", methods=["POST"])
