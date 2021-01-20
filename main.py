@@ -2,8 +2,17 @@ from flask import Flask, request
 from flask import jsonify, make_response
 import json
 import random
+import pickle
+import config as CFG
+import sklearn
+
+
+def load_model():
+    return pickle.load(open(CFG.MODEL_FILE, 'rb'))
+
 
 app = Flask(__name__)
+model = load_model()
 
 
 def convert_json(my_dict):
