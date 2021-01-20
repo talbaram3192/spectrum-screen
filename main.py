@@ -5,6 +5,8 @@ import random
 import pickle
 import config as CFG
 import sklearn
+import numpy as np
+import pandas as pd
 
 
 def load_model():
@@ -48,7 +50,13 @@ def predict():
     print('After encoding- ', encoded_dict)
 
     # return make_response(jsonify({"prediction": 0, "prediction_probability": 0.98}), 200)
-    return make_response(jsonify(encoded_dict), 200)
+    dict = eval(encoded_dict)
+    my_dict = np.array(pd.Series(dict)).reshape(1, len(dict))
+    y_pred = model.predict(my_dict)[0]
+    proba = model.predict_proba(my_dict)[0][1]
+
+    response = {"Prediction":y_pred, "Prediction_probability":proba}
+    return make_response(jsonify(str(response)), 200)
 
 
 if __name__ == '__main__':

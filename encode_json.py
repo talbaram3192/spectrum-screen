@@ -28,33 +28,6 @@ def get_explanation(pred):  # Dictionary object
     # plt.savefig('force_plot.png')
 
 
-#
-# def convert_json(my_dict):
-#     new_json = {}
-#     print(type(my_dict))
-#     # my_dict = eval(my_dict)
-#     for num, i in enumerate(my_dict):
-#         if num <= 8:
-#             if my_dict[i] == 2 or my_dict[i] == 3 or my_dict[i] == 4:
-#                 new_json[i] = 1
-#             else:
-#                 new_json[i] = 0
-#         elif num == 9:
-#             if my_dict[i] == 0 or my_dict[i] == 1 or my_dict[i] == 2:
-#                 new_json[i] = 1
-#             else:
-#                 new_json[i] = 0
-#         elif num == 11:
-#             if my_dict[i] == 2:
-#                 new_json[i] = random.randint(0, 1)
-#             else:
-#                 new_json[i] = my_dict[i]
-#         else:
-#             new_json[i] = my_dict[i]
-#
-#     return json.dumps(new_json)
-
-
 def main():
 
        my_json = {"A1": 0,"A2": 1,"A3": 4,"A4": 3,"A5": 1, "A6":4, "A7": 2,
