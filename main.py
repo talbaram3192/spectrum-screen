@@ -1,20 +1,23 @@
-from flask import Flask, request
-from flask import jsonify, make_response
+from flask import Flask, request, jsonify, make_response
 import json
 import random
 import pickle
 import config as CFG
 import sklearn
 import numpy as np
-import pandas as pd
 
 
 def load_model():
     return pickle.load(open(CFG.MODEL_FILE, 'rb'))
 
 
+def load_age_mons_preprocessing():
+    return pickle.load(open(CFG.AGE_MONS_PREPROCESSING_FILE, 'rb'))
+
+
 app = Flask(__name__)
 model = load_model()
+age_mons_preprocessing = load_age_mons_preprocessing()
 
 
 def convert_json(my_dict):
@@ -43,20 +46,31 @@ def convert_json(my_dict):
 
 @app.route("/api/predict", methods=["POST"])
 def predict():
-    my_json = request.get_json()
-    my_json = json.loads(my_json)
-    print('Before encoding', my_json)
-    encoded_dict = convert_json(my_json)
-    print('After encoding- ', encoded_dict)
+    try:
+        my_json = request.get_json()
+        encoded_dict = convert_json(my_json)
+        dictionary = eval(encoded_dict)
 
-    # return make_response(jsonify({"prediction": 0, "prediction_probability": 0.98}), 200)
-    dict = eval(encoded_dict)
-    my_dict = np.array(pd.Series(dict)).reshape(1, len(dict))
-    y_pred = model.predict(my_dict)[0]
-    proba = model.predict_proba(my_dict)[0][1]
+        normalize_age_mons = age_mons_preprocessing.transform([[dictionary['age_month']]])[0, 0]
 
-    response = {"Prediction":y_pred, "Prediction_probability":proba}
-    return make_response(jsonify(str(response)), 200)
+        dictionary['age_month'] = normalize_age_mons
+        my_dict = np.array([list(dictionary.values())])
+
+        prediction_probability = model.predict_proba(my_dict)[0]
+
+        if prediction_probability[1] > 0.5:
+            prediction_probability = prediction_probability[1]
+            predict_spectrum = 1
+        else:
+            prediction_probability = prediction_probability[0]
+            predict_spectrum = 0
+
+        response = {"prediction": predict_spectrum, "prediction_probability": prediction_probability}
+
+        return make_response(jsonify(response), 200)
+
+    except ValueError:
+        return 'Bad Request', 400
 
 
 if __name__ == '__main__':
