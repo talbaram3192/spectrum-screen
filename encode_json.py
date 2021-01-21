@@ -36,8 +36,8 @@ def main():
        my_json = {"A1": 0,"A2": 1,"A3": 4,"A4": 3,"A5": 1, "A6":4, "A7": 2,
                "A8": 0,"A9": 1,"A10": 0,"age_month": 20,"sex": 2,"jaundice": 0,"family_mem_with_ASD": 1}
 
-       # url = 'https://spectrum-screen-inference.herokuapp.com/api/explain'
-       url = 'https://spectrum-screening.herokuapp.com/api/explain'
+       # url = 'https://spectrum-screen-inference.herokuapp.com/api/predict'
+       url = 'https://spectrum-screening.herokuapp.com/api/predict'
        # url = 'http://127.0.0.1:5000/api/explain'  # for local testing
 
        pred = requests.post(url, json=json.dumps(my_json))
