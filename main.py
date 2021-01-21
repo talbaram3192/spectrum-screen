@@ -17,14 +17,14 @@ def load_age_mons_preprocessing():
     return pickle.load(open(CFG.AGE_MONS_PREPROCESSING_FILE, 'rb'))
 
 
-def load_training_set():
-    return pickle.load(open(CFG.TRAINING, 'rb'))
+# def load_training_set():
+#     return pickle.load(open(CFG.TRAINING, 'rb'))
 
 
 app = Flask(__name__)
 model = load_model()
 age_mons_preprocessing = load_age_mons_preprocessing()
-training = load_training_set()
+# training = load_training_set()
 
 
 def convert_json(my_dict):
