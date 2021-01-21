@@ -80,29 +80,31 @@ def predict():
         return 'Bad Request', 400
 
 
-# @app.route("/api/explain", methods=["POST"])
-# def explain():
-#     try:
-#         my_json = request.get_json()
-#         encoded_dict = convert_json(my_json)
-#         dictionary = eval(encoded_dict)
-#
-#         normalize_age_mons = age_mons_preprocessing.transform([[dictionary['age_month']]])[0, 0]
-#
-#         dictionary['age_month'] = normalize_age_mons
-#         pred = np.array([x[1] for x in dictionary.items()])
-#
-#         exp = LimeTabularExplainer(training.values, feature_names=training.columns, discretize_continuous=True)
-#
-#         fig = exp.explain_instance(pred, model.predict_proba).as_pyplot_figure()
-#         fig.figsize = (30, 10)
-#         plt.tight_layout()
-#         plt.savefig('explain.png')
-#
-#         return send_file('explain.png', mimetype='image/png', as_attachment=True)
-#
-#     except ValueError:
-#         return 'Bad Request', 400
+@app.route("/api/explain", methods=["POST"])
+def explain():
+    try:
+        with open(CFG.TRAINING, 'rb') as f:
+            training = pickle.load(f)
+        my_json = request.get_json()
+        encoded_dict = convert_json(my_json)
+        dictionary = eval(encoded_dict)
+
+        normalize_age_mons = age_mons_preprocessing.transform([[dictionary['age_month']]])[0, 0]
+
+        dictionary['age_month'] = normalize_age_mons
+        pred = np.array([x[1] for x in dictionary.items()])
+
+        exp = LimeTabularExplainer(training.values, feature_names=training.columns, discretize_continuous=True)
+
+        fig = exp.explain_instance(pred, model.predict_proba).as_pyplot_figure()
+        fig.figsize = (30, 10)
+        plt.tight_layout()
+        plt.savefig('explain.png')
+
+        return send_file('explain.png', mimetype='image/png', as_attachment=True)
+
+    except ValueError:
+        return 'Bad Request', 400
 
 
 if __name__ == '__main__':
