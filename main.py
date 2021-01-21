@@ -21,7 +21,7 @@ def load_age_mons_preprocessing():
 app = Flask(__name__)
 model = load_model()
 age_mons_preprocessing = load_age_mons_preprocessing()
-training = pd.read_csv(CFG.TRAINING)
+# training = pd.read_csv(CFG.TRAINING)
 
 
 def convert_json(my_dict):

@@ -9,6 +9,7 @@ from lime.lime_tabular import LimeTabularExplainer
 import webbrowser
 import base64
 from IPython.display import display, HTML
+import config
 
 with open('ml-model/toddler_autism_model_logistic_regression.pickle', 'rb') as m:
     MODEL = pickle.load(m)
@@ -32,6 +33,9 @@ def get_explanation(pred):  # Dictionary object
 
 
 def main():
+
+       df = pd.read_csv(config.TRAINING)
+       print(df)
 
        my_json = {"A1": 0,"A2": 1,"A3": 4,"A4": 3,"A5": 1, "A6":4, "A7": 2,
                "A8": 0,"A9": 1,"A10": 0,"age_month": 20,"sex": 2,"jaundice": 0,"family_mem_with_ASD": 1}
