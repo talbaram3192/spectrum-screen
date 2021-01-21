@@ -5,9 +5,10 @@ import pickle
 import config as CFG
 import sklearn
 import numpy as np
-from lime.lime_tabular import LimeTabularExplainer
-import matplotlib.pyplot as plt
-import pandas as pd
+# from lime.lime_tabular import LimeTabularExplainer
+# import matplotlib.pyplot as plt
+# import pandas as pd
+
 
 def load_model():
     return pickle.load(open(CFG.MODEL_FILE, 'rb'))
@@ -20,7 +21,7 @@ def load_age_mons_preprocessing():
 app = Flask(__name__)
 model = load_model()
 age_mons_preprocessing = load_age_mons_preprocessing()
-training = pd.read_csv(CFG.TRAINING)
+# training = pd.read_csv(CFG.TRAINING)
 
 
 def convert_json(my_dict):
@@ -76,29 +77,29 @@ def predict():
         return 'Bad Request', 400
 
 
-@app.route("/api/explain", methods=["POST"])
-def explain():
-    try:
-        my_json = request.get_json()
-        encoded_dict = convert_json(my_json)
-        dictionary = eval(encoded_dict)
-
-        normalize_age_mons = age_mons_preprocessing.transform([[dictionary['age_month']]])[0, 0]
-
-        dictionary['age_month'] = normalize_age_mons
-        pred = np.array([x[1] for x in dictionary.items()])
-
-        exp = LimeTabularExplainer(training.values, feature_names=training.columns, discretize_continuous=True)
-
-        fig = exp.explain_instance(pred, model.predict_proba).as_pyplot_figure()
-        fig.figsize = (30, 10)
-        plt.tight_layout()
-        plt.savefig('explain.png')
-
-        return send_file('explain.png', mimetype='image/png', as_attachment=True)
-
-    except ValueError:
-        return 'Bad Request', 400
+# @app.route("/api/explain", methods=["POST"])
+# def explain():
+#     try:
+#         my_json = request.get_json()
+#         encoded_dict = convert_json(my_json)
+#         dictionary = eval(encoded_dict)
+#
+#         normalize_age_mons = age_mons_preprocessing.transform([[dictionary['age_month']]])[0, 0]
+#
+#         dictionary['age_month'] = normalize_age_mons
+#         pred = np.array([x[1] for x in dictionary.items()])
+#
+#         exp = LimeTabularExplainer(training.values, feature_names=training.columns, discretize_continuous=True)
+#
+#         fig = exp.explain_instance(pred, model.predict_proba).as_pyplot_figure()
+#         fig.figsize = (30, 10)
+#         plt.tight_layout()
+#         plt.savefig('explain.png')
+#
+#         return send_file('explain.png', mimetype='image/png', as_attachment=True)
+#
+#     except ValueError:
+#         return 'Bad Request', 400
 
 
 if __name__ == '__main__':
