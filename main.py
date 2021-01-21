@@ -7,7 +7,6 @@ import sklearn
 import numpy as np
 from lime.lime_tabular import LimeTabularExplainer
 import matplotlib.pyplot as plt
-# import pandas as pd
 
 
 def load_model():
