@@ -5,8 +5,8 @@ import pickle
 import config as CFG
 import sklearn
 import numpy as np
-from lime.lime_tabular import LimeTabularExplainer
-import matplotlib.pyplot as plt
+# from lime.lime_tabular import LimeTabularExplainer
+# import matplotlib.pyplot as plt
 
 
 def load_model():
