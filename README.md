@@ -1,2 +1,4 @@
 # spectrum-screen
-Prediction backend for the Spectrum screen+ project for ITC hackathon january 2021
+Prediction backend for the Spectrum screen+ application:
+https://spectrum-screen.netlify.app/
+
